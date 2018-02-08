@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Colors = require("colors");
-const n_config_1 = require("n-config");
+const n_config_1 = require("@nivinjoseph/n-config");
 // public
 class ConsoleLogger {
     logDebug(debug) {
-        if (n_config_1.ConfigurationManager.getConfig("mode") === "dev")
+        if (n_config_1.ConfigurationManager.getConfig("env") === "dev")
             console.log(Colors.grey(`DEBUG: ${debug}`));
         return Promise.resolve();
     }

@@ -1,5 +1,5 @@
 import { Logger } from "./logger";
-import { Exception } from "n-exception";
+import { Exception } from "@nivinjoseph/n-exception";
 export declare class ConsoleLogger implements Logger {
     logDebug(debug: string): Promise<void>;
     logInfo(info: string): Promise<void>;

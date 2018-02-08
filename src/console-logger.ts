@@ -1,7 +1,7 @@
 import { Logger } from "./logger";
-import { Exception } from "n-exception";
+import { Exception } from "@nivinjoseph/n-exception";
 import * as Colors from "colors";
-import { ConfigurationManager } from "n-config";
+import { ConfigurationManager } from "@nivinjoseph/n-config";
 
 
 // public
@@ -9,7 +9,7 @@ export class ConsoleLogger implements Logger
 {
     public logDebug(debug: string): Promise<void>
     {
-        if (ConfigurationManager.getConfig<string>("mode") === "dev")
+        if (ConfigurationManager.getConfig<string>("env") === "dev")
             console.log(Colors.grey(`DEBUG: ${debug}`));
         return Promise.resolve();
     }
