@@ -18,5 +18,6 @@
 //     {
 //         throw new Error('Method not implemented.');
 //     }
-// } 
+// }
+// TODO: some day
 //# sourceMappingURL=file-logger.js.map
