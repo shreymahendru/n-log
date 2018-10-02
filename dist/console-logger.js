@@ -2,11 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Colors = require("colors");
 const n_config_1 = require("@nivinjoseph/n-config");
-// @ts-ignore
 const moment = require("moment-timezone");
 const log_date_time_zone_1 = require("./log-date-time-zone");
 require("@nivinjoseph/n-ext");
-// public
 class ConsoleLogger {
     constructor(logDateTimeZone) {
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
