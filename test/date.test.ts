@@ -8,7 +8,7 @@ import { LogDateTimeZone } from "../src";
 
 suite("Date", () =>
 {
-    test("Epoch to local", () =>
+    test("Epoch to local", async () =>
     {
         // let now = Date.now();
         // console.log("now", now);
@@ -49,19 +49,19 @@ suite("Date", () =>
         // console.log("utc", utc);
         
         const defaultLogger = new ConsoleLogger();
-        defaultLogger.logWarning("This is a warning default");
+        await defaultLogger.logWarning("This is a warning default");
         
         const utcLogger = new ConsoleLogger(LogDateTimeZone.utc);
-        utcLogger.logWarning("This is a warning utc");
+        await utcLogger.logWarning("This is a warning utc");
         
         const localLogger = new ConsoleLogger(LogDateTimeZone.local);
-        localLogger.logWarning("This is a warning local");
+        await localLogger.logWarning("This is a warning local");
         
         const estLogger = new ConsoleLogger(LogDateTimeZone.est);
-        estLogger.logWarning("This is a warning est");
+        await estLogger.logWarning("This is a warning est");
         
         const pstLogger = new ConsoleLogger(LogDateTimeZone.pst);
-        pstLogger.logWarning("This is a warning pst");
+        await pstLogger.logWarning("This is a warning pst");
         
         
         
