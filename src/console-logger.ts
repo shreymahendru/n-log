@@ -48,8 +48,30 @@ export class ConsoleLogger implements Logger
 
     public logError(error: string | Exception): Promise<void>
     {
-        console.log(Colors.red(`${this.getDateTime()} ERROR: ${error.toString()}`));
+        console.log(Colors.red(`${this.getDateTime()} ERROR: ${this.getErrorMessage(error)}`));
         return Promise.resolve();
+    }
+    
+    
+    private getErrorMessage(exp: Exception | Error | any): string
+    {
+        let logMessage = "";
+        try 
+        {   
+            if (exp instanceof Exception)
+                logMessage = exp.toString();
+            else if (exp instanceof Error)
+                logMessage = exp.stack;
+            else
+                logMessage = exp.toString();
+        }
+        catch (error)
+        {
+            console.warn(error);
+            logMessage = "There was an error while attempting to log another error.";
+        }
+        
+        return logMessage;
     }
     
     
