@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const n_exception_1 = require("@nivinjoseph/n-exception");
 const Colors = require("colors");
 const n_config_1 = require("@nivinjoseph/n-config");
 const moment = require("moment-timezone");
@@ -29,8 +30,24 @@ class ConsoleLogger {
         return Promise.resolve();
     }
     logError(error) {
-        console.log(Colors.red(`${this.getDateTime()} ERROR: ${error.toString()}`));
+        console.log(Colors.red(`${this.getDateTime()} ERROR: ${this.getErrorMessage(error)}`));
         return Promise.resolve();
+    }
+    getErrorMessage(exp) {
+        let logMessage = "";
+        try {
+            if (exp instanceof n_exception_1.Exception)
+                logMessage = exp.toString();
+            else if (exp instanceof Error)
+                logMessage = exp.stack;
+            else
+                logMessage = exp.toString();
+        }
+        catch (error) {
+            console.warn(error);
+            logMessage = "There was an error while attempting to log another error.";
+        }
+        return logMessage;
     }
     getDateTime() {
         let result = null;
