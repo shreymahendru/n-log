@@ -2,7 +2,6 @@ import { Logger } from "./logger";
 import { Exception } from "@nivinjoseph/n-exception";
 import * as Colors from "colors";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
-// @ts-ignore
 import * as moment from "moment-timezone";
 import { LogDateTimeZone } from "./log-date-time-zone";
 import "@nivinjoseph/n-ext";
