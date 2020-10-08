@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LogDateTimeZone = void 0;
 var LogDateTimeZone;
 (function (LogDateTimeZone) {
     LogDateTimeZone["utc"] = "utc";
