@@ -32,23 +32,22 @@
     },
     "homepage": "https://github.com/nivinjoseph/n-log#readme",
     "devDependencies": {
-        "@types/mocha": "^5.2.7",
-        "@types/moment-timezone": "^0.5.12",
+        "@types/mocha": "^8.0.3",
         "@types/node": "^12.12.17",
-        "mocha": "^6.2.2",
-        "ts-node": "^8.5.4",
-        "tslint": "^5.20.1",
-        "typescript": "^3.7.3",
+        "mocha": "^8.1.3",
+        "ts-node": "^9.0.0",
+        "tslint": "^6.1.3",
+        "typescript": "^4.0.3",
         "typescript-tslint-plugin": "^0.5.5"
     },
     "dependencies": {
-        "@nivinjoseph/n-config": "^1.0.25",
-        "@nivinjoseph/n-defensive": "^1.0.28",
+        "@nivinjoseph/n-config": "^1.0.28",
+        "@nivinjoseph/n-defensive": "^1.0.33",
         "@nivinjoseph/n-exception": "^1.0.19",
-        "@nivinjoseph/n-ext": "^1.1.10",
-        "@nivinjoseph/n-util": "^1.0.37",
+        "@nivinjoseph/n-ext": "^1.1.19",
+        "@nivinjoseph/n-util": "^1.0.58",
         "colors": "^1.4.0",
-        "moment": "^2.24.0",
-        "moment-timezone": "^0.5.27"
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.31"
     }
 }

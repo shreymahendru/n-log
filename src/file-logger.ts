@@ -1,4 +1,3 @@
-import { Logger } from "./logger";
 import { Exception } from "@nivinjoseph/n-exception";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
 import * as moment from "moment-timezone";
@@ -8,107 +7,56 @@ import { given } from "@nivinjoseph/n-defensive";
 import * as Fs from "fs";
 import * as Path from "path";
 import { Make, Duration, Mutex } from "@nivinjoseph/n-util";
+import { BaseLogger } from "./base-logger";
+import { LogPrefix } from "./log-prefix";
 
 
 // public
-export class FileLogger implements Logger
+export class FileLogger extends BaseLogger
 {
     private readonly _mutex = new Mutex();
     private readonly _logDirPath: string;
-    private readonly _logDateTimeZone: LogDateTimeZone;
-    private _lastPurgedAt: number;
+    private readonly _retentionDays: number;
+    
+    private _lastPurgedAt = 0;
 
     
-    public constructor(logDirPath: string, logDateTimeZone?: LogDateTimeZone)
+    public constructor(logDirPath: string, retentionDays: number, logDateTimeZone?: LogDateTimeZone)
     {
+        super(logDateTimeZone);
+        
         given(logDirPath, "logDirPath").ensureHasValue().ensureIsString()
             .ensure(t => Path.isAbsolute(t), "must be absolute");
+            
+        given(retentionDays, "retentionDays").ensureHasValue().ensureIsNumber().ensure(t => t > 0);
+        this._retentionDays = Number.parseInt(retentionDays.toString());
         
         if (!Fs.existsSync(logDirPath))
             Fs.mkdirSync(logDirPath);
         
         this._logDirPath = logDirPath;
-        
-        if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
-            ![LogDateTimeZone.utc, LogDateTimeZone.local, LogDateTimeZone.est, LogDateTimeZone.pst].contains(logDateTimeZone))
-        {
-            this._logDateTimeZone = LogDateTimeZone.utc;
-        }
-        else
-        {
-            this._logDateTimeZone = logDateTimeZone;
-        }
-        
-        this._lastPurgedAt = 0;
     }
 
 
     public async logDebug(debug: string): Promise<void>
     {
         if (ConfigurationManager.getConfig<string>("env") === "dev")
-            await this.writeToLog(`DEBUG: ${debug}`);
+            await this.writeToLog(`${LogPrefix.debug} ${debug}`);
     }
 
     public async logInfo(info: string): Promise<void>
     {
-        await this.writeToLog(`INFO: ${info}`);
+        await this.writeToLog(`${LogPrefix.info} ${info}`);
     }
 
     public async logWarning(warning: string): Promise<void>
     {
-        await this.writeToLog(`WARNING: ${warning}`);
+        await this.writeToLog(`${LogPrefix.warning} ${warning}`);
     }
 
     public async logError(error: string | Exception): Promise<void>
     {
-        await this.writeToLog(`ERROR: ${this.getErrorMessage(error)}`);
-    }
-
-    private getErrorMessage(exp: Exception | Error | any): string
-    {
-        let logMessage = "";
-        try 
-        {
-            if (exp instanceof Exception)
-                logMessage = exp.toString();
-            else if (exp instanceof Error)
-                logMessage = exp.stack;
-            else
-                logMessage = exp.toString();
-        }
-        catch (error)
-        {
-            console.warn(error);
-            logMessage = "There was an error while attempting to log another error.";
-        }
-
-        return logMessage;
-    }
-
-    private getDateTime(): string
-    {
-        let result: string = null;
-
-        switch (this._logDateTimeZone)
-        {
-            case LogDateTimeZone.utc:
-                result = moment().utc().format();
-                break;
-            case LogDateTimeZone.local:
-                result = moment().format();
-                break;
-            case LogDateTimeZone.est:
-                result = moment().tz("America/New_York").format();
-                break;
-            case LogDateTimeZone.pst:
-                result = moment().tz("America/Los_Angeles").format();
-                break;
-            default:
-                result = moment().utc().format();
-                break;
-        }
-
-        return result;
+        await this.writeToLog(`${LogPrefix.error} ${this.getErrorMessage(error)}`);
     }
     
     private async writeToLog(message: string): Promise<void>
@@ -139,7 +87,7 @@ export class FileLogger implements Logger
     private async purgeLogs(): Promise<void>
     {
         const now = Date.now();
-        if (this._lastPurgedAt && this._lastPurgedAt > (now - Duration.fromDays(7)))
+        if (this._lastPurgedAt && this._lastPurgedAt > (now - Duration.fromDays(this._retentionDays)))
             return;
         
         const files = await Make.callbackToPromise<ReadonlyArray<string>>(Fs.readdir)(this._logDirPath);
@@ -147,7 +95,7 @@ export class FileLogger implements Logger
         {
             const filePath = Path.join(this._logDirPath, file);
             const stats = await Make.callbackToPromise<Fs.Stats>(Fs.stat)(filePath);
-            if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - Duration.fromDays(7)))
+            if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - Duration.fromDays(this._retentionDays)))
                 await Make.callbackToPromise<void>(Fs.unlink)(filePath);
         }, 1);
         

@@ -6,7 +6,7 @@ suite("FileLogger tests", () =>
 {
     test("Basic tests", async () =>
     {
-        const logger = new FileLogger("/Users/nivin/Development/test", LogDateTimeZone.est);
+        const logger = new FileLogger("/Users/nivin/Development/test", 7, LogDateTimeZone.est);
         
         await logger.logInfo("I am an info");
         
