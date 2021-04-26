@@ -17,7 +17,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         return Promise.resolve();
     }
     logWarning(warning) {
-        console.log(Colors.yellow(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${warning}`));
+        console.log(Colors.yellow(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`));
         return Promise.resolve();
     }
     logError(error) {

@@ -26,7 +26,7 @@ class BaseLogger {
         }
         catch (error) {
             console.warn(error);
-            logMessage = "There was an error while attempting to log another error.";
+            logMessage = "There was an error while attempting to log another message.";
         }
         return logMessage;
     }

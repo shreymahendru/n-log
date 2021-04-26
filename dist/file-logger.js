@@ -45,7 +45,7 @@ class FileLogger extends base_logger_1.BaseLogger {
     }
     logWarning(warning) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.writeToLog(`${log_prefix_1.LogPrefix.warning} ${warning}`);
+            yield this.writeToLog(`${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`);
         });
     }
     logError(error) {

@@ -6,7 +6,7 @@ export declare abstract class BaseLogger implements Logger {
     constructor(logDateTimeZone?: LogDateTimeZone);
     abstract logDebug(debug: string): Promise<void>;
     abstract logInfo(info: string): Promise<void>;
-    abstract logWarning(warning: string): Promise<void>;
+    abstract logWarning(warning: string | Exception): Promise<void>;
     abstract logError(error: string | Exception): Promise<void>;
     protected getErrorMessage(exp: Exception | Error | any): string;
     protected getDateTime(): string;
