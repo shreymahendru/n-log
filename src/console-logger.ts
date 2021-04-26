@@ -22,9 +22,9 @@ export class ConsoleLogger extends BaseLogger
         return Promise.resolve();
     }
 
-    public logWarning(warning: string): Promise<void>
+    public logWarning(warning: string | Exception): Promise<void>
     {
-        console.log(Colors.yellow(`${this.getDateTime()} ${LogPrefix.warning} ${warning}`));
+        console.log(Colors.yellow(`${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}`));
         return Promise.resolve();
     }
 

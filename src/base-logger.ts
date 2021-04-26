@@ -25,7 +25,7 @@ export abstract class BaseLogger implements Logger
     
     public abstract logDebug(debug: string): Promise<void>;
     public abstract logInfo(info: string): Promise<void>;
-    public abstract logWarning(warning: string): Promise<void>;
+    public abstract logWarning(warning: string | Exception): Promise<void>;
     public abstract logError(error: string | Exception): Promise<void>;
     
     protected getErrorMessage(exp: Exception | Error | any): string
@@ -43,7 +43,7 @@ export abstract class BaseLogger implements Logger
         catch (error)
         {
             console.warn(error);
-            logMessage = "There was an error while attempting to log another error.";
+            logMessage = "There was an error while attempting to log another message.";
         }
 
         return logMessage;

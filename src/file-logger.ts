@@ -49,9 +49,9 @@ export class FileLogger extends BaseLogger
         await this.writeToLog(`${LogPrefix.info} ${info}`);
     }
 
-    public async logWarning(warning: string): Promise<void>
+    public async logWarning(warning: string | Exception): Promise<void>
     {
-        await this.writeToLog(`${LogPrefix.warning} ${warning}`);
+        await this.writeToLog(`${LogPrefix.warning} ${this.getErrorMessage(warning)}`);
     }
 
     public async logError(error: string | Exception): Promise<void>
