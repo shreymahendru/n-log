@@ -19,6 +19,7 @@ const Path = require("path");
 const n_util_1 = require("@nivinjoseph/n-util");
 const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
+// public
 class FileLogger extends base_logger_1.BaseLogger {
     constructor(logDirPath, retentionDays, logDateTimeZone) {
         super(logDateTimeZone);

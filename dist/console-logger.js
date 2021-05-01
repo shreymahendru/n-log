@@ -6,6 +6,7 @@ const n_config_1 = require("@nivinjoseph/n-config");
 require("@nivinjoseph/n-ext");
 const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
+// public
 class ConsoleLogger extends base_logger_1.BaseLogger {
     logDebug(debug) {
         if (n_config_1.ConfigurationManager.getConfig("env") === "dev")
