@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsoleLogger = void 0;
+require("@nivinjoseph/n-ext");
 const Colors = require("colors");
 const n_config_1 = require("@nivinjoseph/n-config");
-require("@nivinjoseph/n-ext");
 const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
 // public
@@ -18,11 +18,11 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         return Promise.resolve();
     }
     logWarning(warning) {
-        console.log(Colors.yellow(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`));
+        console.warn(Colors.yellow(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`));
         return Promise.resolve();
     }
     logError(error) {
-        console.log(Colors.red(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}`));
+        console.error(Colors.red(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}`));
         return Promise.resolve();
     }
 }
