@@ -44,7 +44,7 @@
         "@nivinjoseph/n-config": "^1.0.33",
         "@nivinjoseph/n-defensive": "^1.0.35",
         "@nivinjoseph/n-exception": "^1.0.23",
-        "@nivinjoseph/n-ext": "^1.1.24",
+        "@nivinjoseph/n-ext": "^1.1.27",
         "@nivinjoseph/n-util": "^1.0.73",
         "colors": "^1.4.0",
         "moment": "^2.29.1",

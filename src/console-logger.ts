@@ -1,7 +1,7 @@
+import "@nivinjoseph/n-ext";
 import { Exception } from "@nivinjoseph/n-exception";
 import * as Colors from "colors";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
-import "@nivinjoseph/n-ext";
 import { BaseLogger } from "./base-logger";
 import { LogPrefix } from "./log-prefix";
 
@@ -24,13 +24,13 @@ export class ConsoleLogger extends BaseLogger
 
     public logWarning(warning: string | Exception): Promise<void>
     {
-        console.log(Colors.yellow(`${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}`));
+        console.warn(Colors.yellow(`${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}`));
         return Promise.resolve();
     }
 
     public logError(error: string | Exception): Promise<void>
     {
-        console.log(Colors.red(`${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}`));
+        console.error(Colors.red(`${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}`));
         return Promise.resolve();
     }
 }
