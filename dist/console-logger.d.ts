@@ -1,4 +1,3 @@
-import "@nivinjoseph/n-ext";
 import { Exception } from "@nivinjoseph/n-exception";
 import { BaseLogger } from "./base-logger";
 export declare class ConsoleLogger extends BaseLogger {

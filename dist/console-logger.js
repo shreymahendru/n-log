@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsoleLogger = void 0;
-require("@nivinjoseph/n-ext");
 const Colors = require("colors");
 const n_config_1 = require("@nivinjoseph/n-config");
 const base_logger_1 = require("./base-logger");

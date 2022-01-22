@@ -25,9 +25,9 @@ class FileLogger extends base_logger_1.BaseLogger {
         super(logDateTimeZone);
         this._mutex = new n_util_1.Mutex();
         this._lastPurgedAt = 0;
-        n_defensive_1.given(logDirPath, "logDirPath").ensureHasValue().ensureIsString()
+        (0, n_defensive_1.given)(logDirPath, "logDirPath").ensureHasValue().ensureIsString()
             .ensure(t => Path.isAbsolute(t), "must be absolute");
-        n_defensive_1.given(retentionDays, "retentionDays").ensureHasValue().ensureIsNumber().ensure(t => t > 0);
+        (0, n_defensive_1.given)(retentionDays, "retentionDays").ensureHasValue().ensureIsNumber().ensure(t => t > 0);
         this._retentionDays = Number.parseInt(retentionDays.toString());
         if (!Fs.existsSync(logDirPath))
             Fs.mkdirSync(logDirPath);
@@ -56,7 +56,7 @@ class FileLogger extends base_logger_1.BaseLogger {
     }
     writeToLog(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            n_defensive_1.given(message, "message").ensureHasValue().ensureIsString();
+            (0, n_defensive_1.given)(message, "message").ensureHasValue().ensureIsString();
             const dateTime = this.getDateTime();
             const logFileName = `${dateTime.substr(0, 13)}.log`;
             const logFilePath = Path.join(this._logDirPath, logFileName);

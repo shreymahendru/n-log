@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileLogger = exports.ConsoleLogger = exports.LogDateTimeZone = void 0;
+require("@nivinjoseph/n-ext");
 const log_date_time_zone_1 = require("./log-date-time-zone");
 Object.defineProperty(exports, "LogDateTimeZone", { enumerable: true, get: function () { return log_date_time_zone_1.LogDateTimeZone; } });
 const console_logger_1 = require("./console-logger");
