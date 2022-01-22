@@ -1,4 +1,3 @@
-import "@nivinjoseph/n-ext";
 import { Exception } from "@nivinjoseph/n-exception";
 import * as Colors from "colors";
 import { ConfigurationManager } from "@nivinjoseph/n-config";

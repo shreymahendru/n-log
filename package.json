@@ -41,13 +41,13 @@
         "typescript-tslint-plugin": "^1.0.1"
     },
     "dependencies": {
-        "@nivinjoseph/n-config": "^1.0.33",
-        "@nivinjoseph/n-defensive": "^1.0.35",
-        "@nivinjoseph/n-exception": "^1.0.23",
-        "@nivinjoseph/n-ext": "^1.1.27",
-        "@nivinjoseph/n-util": "^1.0.73",
-        "colors": "^1.4.0",
+        "@nivinjoseph/n-config": "^1.0.34",
+        "@nivinjoseph/n-defensive": "^1.0.37",
+        "@nivinjoseph/n-exception": "^1.0.24",
+        "@nivinjoseph/n-ext": "^1.1.34",
+        "@nivinjoseph/n-util": "^1.0.74",
+        "colors": "1.4.0",
         "moment": "^2.29.1",
-        "moment-timezone": "^0.5.33"
+        "moment-timezone": "^0.5.34"
     }
 }
