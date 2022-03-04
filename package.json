@@ -45,7 +45,7 @@
         "@nivinjoseph/n-defensive": "^1.0.37",
         "@nivinjoseph/n-exception": "^1.0.24",
         "@nivinjoseph/n-ext": "^1.1.34",
-        "@nivinjoseph/n-util": "^1.0.74",
+        "@nivinjoseph/n-util": "^1.0.77",
         "colors": "1.4.0",
         "moment": "^2.29.1",
         "moment-timezone": "^0.5.34"
