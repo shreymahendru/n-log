@@ -87,7 +87,7 @@ export class FileLogger extends BaseLogger
     private async purgeLogs(): Promise<void>
     {
         const now = Date.now();
-        if (this._lastPurgedAt && this._lastPurgedAt > (now - Duration.fromDays(this._retentionDays)))
+        if (this._lastPurgedAt && this._lastPurgedAt > (now - Duration.fromDays(this._retentionDays).toMilliSeconds()))
             return;
         
         const files = await Make.callbackToPromise<ReadonlyArray<string>>(Fs.readdir)(this._logDirPath);
@@ -95,7 +95,7 @@ export class FileLogger extends BaseLogger
         {
             const filePath = Path.join(this._logDirPath, file);
             const stats = await Make.callbackToPromise<Fs.Stats>(Fs.stat)(filePath);
-            if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - Duration.fromDays(this._retentionDays)))
+            if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - Duration.fromDays(this._retentionDays).toMilliSeconds()))
                 await Make.callbackToPromise<void>(Fs.unlink)(filePath);
         }, 1);
         
