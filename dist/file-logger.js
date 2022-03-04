@@ -76,13 +76,13 @@ class FileLogger extends base_logger_1.BaseLogger {
     purgeLogs() {
         return __awaiter(this, void 0, void 0, function* () {
             const now = Date.now();
-            if (this._lastPurgedAt && this._lastPurgedAt > (now - n_util_1.Duration.fromDays(this._retentionDays)))
+            if (this._lastPurgedAt && this._lastPurgedAt > (now - n_util_1.Duration.fromDays(this._retentionDays).toMilliSeconds()))
                 return;
             const files = yield n_util_1.Make.callbackToPromise(Fs.readdir)(this._logDirPath);
             yield files.forEachAsync((file) => __awaiter(this, void 0, void 0, function* () {
                 const filePath = Path.join(this._logDirPath, file);
                 const stats = yield n_util_1.Make.callbackToPromise(Fs.stat)(filePath);
-                if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - n_util_1.Duration.fromDays(this._retentionDays)))
+                if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - n_util_1.Duration.fromDays(this._retentionDays).toMilliSeconds()))
                     yield n_util_1.Make.callbackToPromise(Fs.unlink)(filePath);
             }), 1);
             this._lastPurgedAt = now;
