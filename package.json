@@ -1,6 +1,6 @@
 {
     "name": "@nivinjoseph/n-log",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "description": "Logging framework",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
