@@ -36,9 +36,9 @@ export abstract class BaseLogger implements Logger
             if (exp instanceof Exception)
                 logMessage = exp.toString();
             else if (exp instanceof Error)
-                logMessage = exp.stack;
+                logMessage = exp.stack!;
             else
-                logMessage = exp.toString();
+                logMessage = (<object>exp).toString();
         }
         catch (error)
         {
@@ -52,7 +52,7 @@ export abstract class BaseLogger implements Logger
 
     protected getDateTime(): string
     {
-        let result: string = null;
+        let result: string | null = null;
 
         switch (this._logDateTimeZone)
         {

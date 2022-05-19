@@ -1,7 +1,6 @@
 import * as Assert from "assert";
 import { ConsoleLogger } from "../src/console-logger";
 import { LogDateTimeZone } from "../src";
-// @ts-ignore
 // import * as moment from "moment-timezone";
 
 

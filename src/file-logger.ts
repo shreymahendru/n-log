@@ -41,25 +41,25 @@ export class FileLogger extends BaseLogger
     public async logDebug(debug: string): Promise<void>
     {
         if (ConfigurationManager.getConfig<string>("env") === "dev")
-            await this.writeToLog(`${LogPrefix.debug} ${debug}`);
+            await this._writeToLog(`${LogPrefix.debug} ${debug}`);
     }
 
     public async logInfo(info: string): Promise<void>
     {
-        await this.writeToLog(`${LogPrefix.info} ${info}`);
+        await this._writeToLog(`${LogPrefix.info} ${info}`);
     }
 
     public async logWarning(warning: string | Exception): Promise<void>
     {
-        await this.writeToLog(`${LogPrefix.warning} ${this.getErrorMessage(warning)}`);
+        await this._writeToLog(`${LogPrefix.warning} ${this.getErrorMessage(warning)}`);
     }
 
     public async logError(error: string | Exception): Promise<void>
     {
-        await this.writeToLog(`${LogPrefix.error} ${this.getErrorMessage(error)}`);
+        await this._writeToLog(`${LogPrefix.error} ${this.getErrorMessage(error)}`);
     }
     
-    private async writeToLog(message: string): Promise<void>
+    private async _writeToLog(message: string): Promise<void>
     {
         given(message, "message").ensureHasValue().ensureIsString();
         
@@ -70,9 +70,9 @@ export class FileLogger extends BaseLogger
         await this._mutex.lock();
         try 
         {
-            await Make.callbackToPromise<void>(Fs.appendFile)(logFilePath, `\n${dateTime} ${message}`);
+            await Make.callbackToPromise(Fs.appendFile)(logFilePath, `\n${dateTime} ${message}`);
 
-            await this.purgeLogs();   
+            await this._purgeLogs();   
         }
         catch (error)
         {
@@ -84,7 +84,7 @@ export class FileLogger extends BaseLogger
         }
     }
     
-    private async purgeLogs(): Promise<void>
+    private async _purgeLogs(): Promise<void>
     {
         const now = Date.now();
         if (this._lastPurgedAt && this._lastPurgedAt > (now - Duration.fromDays(this._retentionDays).toMilliSeconds()))
@@ -96,7 +96,7 @@ export class FileLogger extends BaseLogger
             const filePath = Path.join(this._logDirPath, file);
             const stats = await Make.callbackToPromise<Fs.Stats>(Fs.stat)(filePath);
             if (stats.isFile() && moment(stats.birthtime).valueOf() < (now - Duration.fromDays(this._retentionDays).toMilliSeconds()))
-                await Make.callbackToPromise<void>(Fs.unlink)(filePath);
+                await Make.callbackToPromise(Fs.unlink)(filePath);
         }, 1);
         
         this._lastPurgedAt = now;
