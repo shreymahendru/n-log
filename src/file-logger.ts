@@ -14,6 +14,10 @@ import { LogPrefix } from "./log-prefix";
 // public
 export class FileLogger extends BaseLogger
 {
+    private readonly _source = "nodejs";
+    private readonly _service = ConfigurationManager.getConfig<string>("package.name");
+    private readonly _env = ConfigurationManager.getConfig<string>("env");
+    
     private readonly _mutex = new Mutex();
     private readonly _logDirPath: string;
     private readonly _retentionDays: number;
@@ -21,9 +25,11 @@ export class FileLogger extends BaseLogger
     private _lastPurgedAt = 0;
 
     
-    public constructor(logDirPath: string, retentionDays: number, logDateTimeZone?: LogDateTimeZone)
+    public constructor(config: { logDirPath: string; retentionDays: number; logDateTimeZone?: LogDateTimeZone; useJsonFormat?: boolean; })
     {
-        super(logDateTimeZone);
+        super(config);
+        
+        const { logDirPath, retentionDays } = config;
         
         given(logDirPath, "logDirPath").ensureHasValue().ensureIsString()
             .ensure(t => Path.isAbsolute(t), "must be absolute");
@@ -41,36 +47,75 @@ export class FileLogger extends BaseLogger
     public async logDebug(debug: string): Promise<void>
     {
         if (ConfigurationManager.getConfig<string>("env") === "dev")
-            await this._writeToLog(`${LogPrefix.debug} ${debug}`);
+            await this._writeToLog(LogPrefix.debug, debug);
     }
 
     public async logInfo(info: string): Promise<void>
     {
-        await this._writeToLog(`${LogPrefix.info} ${info}`);
+        await this._writeToLog(LogPrefix.info, info);
     }
 
     public async logWarning(warning: string | Exception): Promise<void>
     {
-        await this._writeToLog(`${LogPrefix.warning} ${this.getErrorMessage(warning)}`);
+        await this._writeToLog(LogPrefix.warning, this.getErrorMessage(warning));
     }
 
     public async logError(error: string | Exception): Promise<void>
     {
-        await this._writeToLog(`${LogPrefix.error} ${this.getErrorMessage(error)}`);
+        await this._writeToLog(LogPrefix.error, this.getErrorMessage(error));
     }
     
-    private async _writeToLog(message: string): Promise<void>
+    private async _writeToLog(status: LogPrefix, message: string): Promise<void>
     {
+        given(status, "status").ensureHasValue().ensureIsEnum(LogPrefix);
         given(message, "message").ensureHasValue().ensureIsString();
         
         const dateTime = this.getDateTime();
+        
+        if (this.useJsonFormat)
+        {
+            let level = "";
+            
+            switch (status)
+            {
+                case LogPrefix.debug:
+                    level = "Debug";
+                    break;
+                case LogPrefix.info:
+                    level = "Info";
+                    break;
+                case LogPrefix.warning:
+                    level = "Warn";
+                    break;
+                case LogPrefix.error:
+                    level = "Error";
+                    break;
+            }
+            
+            const log = {
+                source: this._source,
+                service: this._service,
+                env: this._env,
+                status: level,
+                message,
+                dateTime,
+                time: new Date().toISOString()
+            };
+            
+            message = JSON.stringify(log);
+        }
+        else
+        {
+            message = `${dateTime} ${status} ${message}`;
+        }
+        
         const logFileName = `${dateTime.substr(0, 13)}.log`;
         const logFilePath = Path.join(this._logDirPath, logFileName);
         
         await this._mutex.lock();
         try 
         {
-            await Make.callbackToPromise(Fs.appendFile)(logFilePath, `\n${dateTime} ${message}`);
+            await Fs.promises.appendFile(logFilePath, `\n${message}`);
 
             await this._purgeLogs();   
         }

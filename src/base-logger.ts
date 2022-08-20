@@ -7,10 +7,21 @@ import * as moment from "moment-timezone";
 export abstract class BaseLogger implements Logger
 {
     private readonly _logDateTimeZone: LogDateTimeZone;
+    private readonly _useJsonFormat: boolean;
+    
+    
+    protected get useJsonFormat(): boolean { return this._useJsonFormat; }
     
 
-    public constructor(logDateTimeZone?: LogDateTimeZone)
+    /**
+     * 
+     * @param logDateTimeZone Default is LogDateTimeZone.utc
+     * @param useJsonFormat Default is false
+     */
+    public constructor(config?: { logDateTimeZone?: LogDateTimeZone; useJsonFormat?: boolean; })
     {
+        const { logDateTimeZone, useJsonFormat } = config ?? {};
+        
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
             ![LogDateTimeZone.utc, LogDateTimeZone.local, LogDateTimeZone.est, LogDateTimeZone.pst].contains(logDateTimeZone))
         {
@@ -20,6 +31,8 @@ export abstract class BaseLogger implements Logger
         {
             this._logDateTimeZone = logDateTimeZone;
         }
+        
+        this._useJsonFormat = !!useJsonFormat;
     }
     
     
@@ -43,7 +56,7 @@ export abstract class BaseLogger implements Logger
         catch (error)
         {
             console.warn(error);
-            logMessage = "There was an error while attempting to log another message.";
+            logMessage = "There was an error while attempting to log another error. Check earlier logs for a warning.";
         }
 
         return logMessage;

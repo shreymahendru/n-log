@@ -50,16 +50,16 @@ suite("Date", () =>
         const defaultLogger = new ConsoleLogger();
         await defaultLogger.logWarning("This is a warning default");
         
-        const utcLogger = new ConsoleLogger(LogDateTimeZone.utc);
+        const utcLogger = new ConsoleLogger({logDateTimeZone: LogDateTimeZone.utc});
         await utcLogger.logWarning("This is a warning utc");
         
-        const localLogger = new ConsoleLogger(LogDateTimeZone.local);
+        const localLogger = new ConsoleLogger({logDateTimeZone: LogDateTimeZone.local});
         await localLogger.logWarning("This is a warning local");
         
-        const estLogger = new ConsoleLogger(LogDateTimeZone.est);
+        const estLogger = new ConsoleLogger({ logDateTimeZone: LogDateTimeZone.est, useJsonFormat: true});
         await estLogger.logWarning("This is a warning est");
         
-        const pstLogger = new ConsoleLogger(LogDateTimeZone.pst);
+        const pstLogger = new ConsoleLogger({logDateTimeZone: LogDateTimeZone.pst});
         await pstLogger.logWarning("This is a warning pst");
         
         
