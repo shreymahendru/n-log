@@ -9,9 +9,11 @@ class BaseLogger {
      *
      * @param logDateTimeZone Default is LogDateTimeZone.utc
      * @param useJsonFormat Default is false
+     * @param logInjector Only valid when useJsonFormat is true
      */
     constructor(config) {
-        const { logDateTimeZone, useJsonFormat } = config !== null && config !== void 0 ? config : {};
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        const { logDateTimeZone, useJsonFormat, logInjector } = config !== null && config !== void 0 ? config : {};
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
             ![log_date_time_zone_1.LogDateTimeZone.utc, log_date_time_zone_1.LogDateTimeZone.local, log_date_time_zone_1.LogDateTimeZone.est, log_date_time_zone_1.LogDateTimeZone.pst].contains(logDateTimeZone)) {
             this._logDateTimeZone = log_date_time_zone_1.LogDateTimeZone.utc;
@@ -20,8 +22,10 @@ class BaseLogger {
             this._logDateTimeZone = logDateTimeZone;
         }
         this._useJsonFormat = !!useJsonFormat;
+        this._logInjector = logInjector !== null && logInjector !== void 0 ? logInjector : null;
     }
     get useJsonFormat() { return this._useJsonFormat; }
+    get logInjector() { return this._logInjector; }
     getErrorMessage(exp) {
         let logMessage = "";
         try {

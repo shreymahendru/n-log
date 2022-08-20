@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileLogger = void 0;
 const tslib_1 = require("tslib");
+require("@nivinjoseph/n-ext");
 const n_config_1 = require("@nivinjoseph/n-config");
 const moment = require("moment-timezone");
-require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 const Fs = require("fs");
 const Path = require("path");
@@ -13,6 +13,11 @@ const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
 // public
 class FileLogger extends base_logger_1.BaseLogger {
+    /**
+     *
+     * @param logDateTimeZone Default is LogDateTimeZone.utc
+     * @param useJsonFormat Default is false
+     */
     constructor(config) {
         super(config);
         this._source = "nodejs";
@@ -71,7 +76,7 @@ class FileLogger extends base_logger_1.BaseLogger {
                         level = "Error";
                         break;
                 }
-                const log = {
+                let log = {
                     source: this._source,
                     service: this._service,
                     env: this._env,
@@ -80,6 +85,8 @@ class FileLogger extends base_logger_1.BaseLogger {
                     dateTime,
                     time: new Date().toISOString()
                 };
+                if (this.logInjector)
+                    log = this.logInjector(log);
                 message = JSON.stringify(log);
             }
             else {

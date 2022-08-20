@@ -16,7 +16,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     logDebug(debug) {
         if (this._env === "dev") {
             if (this.useJsonFormat) {
-                const log = {
+                let log = {
                     source: this._source,
                     service: this._service,
                     env: this._env,
@@ -25,6 +25,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                     dateTime: this.getDateTime(),
                     time: new Date().toISOString()
                 };
+                if (this.logInjector)
+                    log = this.logInjector(log);
                 console.log(Colors.grey(JSON.stringify(log)));
             }
             else {
@@ -35,7 +37,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     }
     logInfo(info) {
         if (this.useJsonFormat) {
-            const log = {
+            let log = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
@@ -44,6 +46,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            if (this.logInjector)
+                log = this.logInjector(log);
             console.log(Colors.green(JSON.stringify(log)));
         }
         else {
@@ -53,15 +57,17 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     }
     logWarning(warning) {
         if (this.useJsonFormat) {
-            const log = {
+            let log = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
                 status: "Warn",
-                message: warning,
+                message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            if (this.logInjector)
+                log = this.logInjector(log);
             console.warn(Colors.yellow(JSON.stringify(log)));
         }
         else {
@@ -71,7 +77,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     }
     logError(error) {
         if (this.useJsonFormat) {
-            const log = {
+            let log = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
@@ -80,6 +86,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            if (this.logInjector)
+                log = this.logInjector(log);
             console.error(Colors.red(JSON.stringify(log)));
         }
         else {
