@@ -20,7 +20,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                     source: this._source,
                     service: this._service,
                     env: this._env,
-                    status: "Debug",
+                    level: "Debug",
                     message: debug,
                     dateTime: this.getDateTime(),
                     time: new Date().toISOString()
@@ -41,7 +41,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 source: this._source,
                 service: this._service,
                 env: this._env,
-                status: "Info",
+                level: "Info",
                 message: info,
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
@@ -61,7 +61,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 source: this._source,
                 service: this._service,
                 env: this._env,
-                status: "Warn",
+                level: "Warn",
                 message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
@@ -81,7 +81,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 source: this._source,
                 service: this._service,
                 env: this._env,
-                status: "Error",
+                level: "Error",
                 message: this.getErrorMessage(error),
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()

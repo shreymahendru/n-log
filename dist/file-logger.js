@@ -80,7 +80,7 @@ class FileLogger extends base_logger_1.BaseLogger {
                     source: this._source,
                     service: this._service,
                     env: this._env,
-                    status: level,
+                    level: level,
                     message,
                     dateTime,
                     time: new Date().toISOString()
