@@ -1,14 +1,15 @@
+import "@nivinjoseph/n-ext";
 import { Exception } from "@nivinjoseph/n-exception";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
 import * as moment from "moment-timezone";
-import { LogDateTimeZone } from "./log-date-time-zone";
-import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
 import * as Fs from "fs";
 import * as Path from "path";
 import { Make, Duration, Mutex } from "@nivinjoseph/n-util";
 import { BaseLogger } from "./base-logger";
 import { LogPrefix } from "./log-prefix";
+import { FileLoggerConfig } from "./file-logger-config";
+import { LogRecord } from "./log-record";
 
 
 // public
@@ -24,8 +25,12 @@ export class FileLogger extends BaseLogger
     
     private _lastPurgedAt = 0;
 
-    
-    public constructor(config: { logDirPath: string; retentionDays: number; logDateTimeZone?: LogDateTimeZone; useJsonFormat?: boolean; })
+    /**
+     * 
+     * @param logDateTimeZone Default is LogDateTimeZone.utc
+     * @param useJsonFormat Default is false
+     */
+    public constructor(config: FileLoggerConfig)
     {
         super(config);
         
@@ -92,7 +97,7 @@ export class FileLogger extends BaseLogger
                     break;
             }
             
-            const log = {
+            let log: LogRecord = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
@@ -101,6 +106,9 @@ export class FileLogger extends BaseLogger
                 dateTime,
                 time: new Date().toISOString()
             };
+            
+            if (this.logInjector)
+                log = this.logInjector(log);
             
             message = JSON.stringify(log);
         }

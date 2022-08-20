@@ -2,25 +2,31 @@ import { Exception } from "@nivinjoseph/n-exception";
 import { LogDateTimeZone } from "./log-date-time-zone";
 import { Logger } from "./logger";
 import * as moment from "moment-timezone";
+import { LoggerConfig } from "./logger-config";
+import { LogRecord } from "./log-record";
 
 
 export abstract class BaseLogger implements Logger
 {
     private readonly _logDateTimeZone: LogDateTimeZone;
     private readonly _useJsonFormat: boolean;
+    private readonly _logInjector: ((record: LogRecord) => LogRecord) | null;
     
     
     protected get useJsonFormat(): boolean { return this._useJsonFormat; }
+    protected get logInjector(): ((record: LogRecord) => LogRecord) | null { return this._logInjector; }
     
 
     /**
      * 
      * @param logDateTimeZone Default is LogDateTimeZone.utc
      * @param useJsonFormat Default is false
+     * @param logInjector Only valid when useJsonFormat is true
      */
-    public constructor(config?: { logDateTimeZone?: LogDateTimeZone; useJsonFormat?: boolean; })
+    public constructor(config?: LoggerConfig)
     {
-        const { logDateTimeZone, useJsonFormat } = config ?? {};
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        const { logDateTimeZone, useJsonFormat, logInjector } = config ?? {};
         
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
             ![LogDateTimeZone.utc, LogDateTimeZone.local, LogDateTimeZone.est, LogDateTimeZone.pst].contains(logDateTimeZone))
@@ -33,6 +39,7 @@ export abstract class BaseLogger implements Logger
         }
         
         this._useJsonFormat = !!useJsonFormat;
+        this._logInjector = logInjector ?? null;
     }
     
     

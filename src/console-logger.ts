@@ -3,6 +3,7 @@ import * as Colors from "colors";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
 import { BaseLogger } from "./base-logger";
 import { LogPrefix } from "./log-prefix";
+import { LogRecord } from "./log-record";
 
 
 // public
@@ -19,7 +20,7 @@ export class ConsoleLogger extends BaseLogger
         {
             if (this.useJsonFormat)
             {
-                const log = {
+                let log: LogRecord = {
                     source: this._source,
                     service: this._service,
                     env: this._env,
@@ -29,14 +30,15 @@ export class ConsoleLogger extends BaseLogger
                     time: new Date().toISOString()
                 };
                 
+                if (this.logInjector)
+                    log = this.logInjector(log);
+                
                 console.log(Colors.grey(JSON.stringify(log)));    
             }
             else
             {
                 console.log(Colors.grey(`${this.getDateTime()} ${LogPrefix.debug} ${debug}`));    
             }
-            
-            
         }
         return Promise.resolve();
     }
@@ -45,7 +47,7 @@ export class ConsoleLogger extends BaseLogger
     {
         if (this.useJsonFormat)
         {
-            const log = {
+            let log: LogRecord = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
@@ -54,6 +56,9 @@ export class ConsoleLogger extends BaseLogger
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            
+            if (this.logInjector)
+                log = this.logInjector(log);
             
             console.log(Colors.green(JSON.stringify(log)));    
         }
@@ -69,15 +74,18 @@ export class ConsoleLogger extends BaseLogger
     {
         if (this.useJsonFormat)
         {
-            const log = {
+            let log: LogRecord = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
                 status: "Warn",
-                message: warning,
+                message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            
+            if (this.logInjector)
+                log = this.logInjector(log);
 
             console.warn(Colors.yellow(JSON.stringify(log)));
         }
@@ -93,7 +101,7 @@ export class ConsoleLogger extends BaseLogger
     {
         if (this.useJsonFormat)
         {
-            const log = {
+            let log: LogRecord = {
                 source: this._source,
                 service: this._service,
                 env: this._env,
@@ -102,6 +110,9 @@ export class ConsoleLogger extends BaseLogger
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            
+            if (this.logInjector)
+                log = this.logInjector(log);
 
             console.error(Colors.red(JSON.stringify(log)));
         }
