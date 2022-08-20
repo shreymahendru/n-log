@@ -13,10 +13,14 @@ const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
 // public
 class FileLogger extends base_logger_1.BaseLogger {
-    constructor(logDirPath, retentionDays, logDateTimeZone) {
-        super(logDateTimeZone);
+    constructor(config) {
+        super(config);
+        this._source = "nodejs";
+        this._service = n_config_1.ConfigurationManager.getConfig("package.name");
+        this._env = n_config_1.ConfigurationManager.getConfig("env");
         this._mutex = new n_util_1.Mutex();
         this._lastPurgedAt = 0;
+        const { logDirPath, retentionDays } = config;
         (0, n_defensive_1.given)(logDirPath, "logDirPath").ensureHasValue().ensureIsString()
             .ensure(t => Path.isAbsolute(t), "must be absolute");
         (0, n_defensive_1.given)(retentionDays, "retentionDays").ensureHasValue().ensureIsNumber().ensure(t => t > 0);
@@ -28,33 +32,64 @@ class FileLogger extends base_logger_1.BaseLogger {
     logDebug(debug) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             if (n_config_1.ConfigurationManager.getConfig("env") === "dev")
-                yield this._writeToLog(`${log_prefix_1.LogPrefix.debug} ${debug}`);
+                yield this._writeToLog(log_prefix_1.LogPrefix.debug, debug);
         });
     }
     logInfo(info) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            yield this._writeToLog(`${log_prefix_1.LogPrefix.info} ${info}`);
+            yield this._writeToLog(log_prefix_1.LogPrefix.info, info);
         });
     }
     logWarning(warning) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            yield this._writeToLog(`${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`);
+            yield this._writeToLog(log_prefix_1.LogPrefix.warning, this.getErrorMessage(warning));
         });
     }
     logError(error) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            yield this._writeToLog(`${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}`);
+            yield this._writeToLog(log_prefix_1.LogPrefix.error, this.getErrorMessage(error));
         });
     }
-    _writeToLog(message) {
+    _writeToLog(status, message) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            (0, n_defensive_1.given)(status, "status").ensureHasValue().ensureIsEnum(log_prefix_1.LogPrefix);
             (0, n_defensive_1.given)(message, "message").ensureHasValue().ensureIsString();
             const dateTime = this.getDateTime();
+            if (this.useJsonFormat) {
+                let level = "";
+                switch (status) {
+                    case log_prefix_1.LogPrefix.debug:
+                        level = "Debug";
+                        break;
+                    case log_prefix_1.LogPrefix.info:
+                        level = "Info";
+                        break;
+                    case log_prefix_1.LogPrefix.warning:
+                        level = "Warn";
+                        break;
+                    case log_prefix_1.LogPrefix.error:
+                        level = "Error";
+                        break;
+                }
+                const log = {
+                    source: this._source,
+                    service: this._service,
+                    env: this._env,
+                    status: level,
+                    message,
+                    dateTime,
+                    time: new Date().toISOString()
+                };
+                message = JSON.stringify(log);
+            }
+            else {
+                message = `${dateTime} ${status} ${message}`;
+            }
             const logFileName = `${dateTime.substr(0, 13)}.log`;
             const logFilePath = Path.join(this._logDirPath, logFileName);
             yield this._mutex.lock();
             try {
-                yield n_util_1.Make.callbackToPromise(Fs.appendFile)(logFilePath, `\n${dateTime} ${message}`);
+                yield Fs.promises.appendFile(logFilePath, `\n${message}`);
                 yield this._purgeLogs();
             }
             catch (error) {

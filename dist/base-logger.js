@@ -5,7 +5,13 @@ const n_exception_1 = require("@nivinjoseph/n-exception");
 const log_date_time_zone_1 = require("./log-date-time-zone");
 const moment = require("moment-timezone");
 class BaseLogger {
-    constructor(logDateTimeZone) {
+    /**
+     *
+     * @param logDateTimeZone Default is LogDateTimeZone.utc
+     * @param useJsonFormat Default is false
+     */
+    constructor(config) {
+        const { logDateTimeZone, useJsonFormat } = config !== null && config !== void 0 ? config : {};
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
             ![log_date_time_zone_1.LogDateTimeZone.utc, log_date_time_zone_1.LogDateTimeZone.local, log_date_time_zone_1.LogDateTimeZone.est, log_date_time_zone_1.LogDateTimeZone.pst].contains(logDateTimeZone)) {
             this._logDateTimeZone = log_date_time_zone_1.LogDateTimeZone.utc;
@@ -13,7 +19,9 @@ class BaseLogger {
         else {
             this._logDateTimeZone = logDateTimeZone;
         }
+        this._useJsonFormat = !!useJsonFormat;
     }
+    get useJsonFormat() { return this._useJsonFormat; }
     getErrorMessage(exp) {
         let logMessage = "";
         try {
@@ -26,7 +34,7 @@ class BaseLogger {
         }
         catch (error) {
             console.warn(error);
-            logMessage = "There was an error while attempting to log another message.";
+            logMessage = "There was an error while attempting to log another error. Check earlier logs for a warning.";
         }
         return logMessage;
     }

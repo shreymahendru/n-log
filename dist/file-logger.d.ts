@@ -3,11 +3,19 @@ import { LogDateTimeZone } from "./log-date-time-zone";
 import "@nivinjoseph/n-ext";
 import { BaseLogger } from "./base-logger";
 export declare class FileLogger extends BaseLogger {
+    private readonly _source;
+    private readonly _service;
+    private readonly _env;
     private readonly _mutex;
     private readonly _logDirPath;
     private readonly _retentionDays;
     private _lastPurgedAt;
-    constructor(logDirPath: string, retentionDays: number, logDateTimeZone?: LogDateTimeZone);
+    constructor(config: {
+        logDirPath: string;
+        retentionDays: number;
+        logDateTimeZone?: LogDateTimeZone;
+        useJsonFormat?: boolean;
+    });
     logDebug(debug: string): Promise<void>;
     logInfo(info: string): Promise<void>;
     logWarning(warning: string | Exception): Promise<void>;
