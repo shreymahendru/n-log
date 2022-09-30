@@ -11,7 +11,7 @@ export class ConsoleLogger extends BaseLogger
 {
     private readonly _source = "nodejs";
     private readonly _service = ConfigurationManager.getConfig<string>("package.name");
-    private readonly _env = ConfigurationManager.getConfig<string>("env");
+    private readonly _env = ConfigurationManager.getConfig<string>("env").toLowerCase();
     
     
     public logDebug(debug: string): Promise<void>
