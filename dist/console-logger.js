@@ -11,7 +11,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         super(...arguments);
         this._source = "nodejs";
         this._service = n_config_1.ConfigurationManager.getConfig("package.name");
-        this._env = n_config_1.ConfigurationManager.getConfig("env");
+        this._env = n_config_1.ConfigurationManager.getConfig("env").toLowerCase();
     }
     logDebug(debug) {
         if (this._env === "dev") {
