@@ -6,4 +6,5 @@ import { FileLogger } from "./file-logger";
 import { LoggerConfig } from "./logger-config";
 import { FileLoggerConfig } from "./file-logger-config";
 import { LogRecord } from "./log-record";
-export { Logger, LoggerConfig, LogRecord, LogDateTimeZone, ConsoleLogger, FileLogger, FileLoggerConfig };
+import { SlackLogger, SlackLoggerConfig } from "./slack-logger";
+export { Logger, LoggerConfig, LogRecord, LogDateTimeZone, ConsoleLogger, FileLogger, FileLoggerConfig, SlackLogger, SlackLoggerConfig };
