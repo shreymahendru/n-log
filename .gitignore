@@ -45,3 +45,5 @@ src/**/*.js
 src/**/*.map
 test/**/*.js
 test/**/*.map
+
+.env
