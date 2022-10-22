@@ -4,15 +4,11 @@ exports.SlackLogger = void 0;
 const tslib_1 = require("tslib");
 const base_logger_1 = require("./base-logger");
 const bolt_1 = require("@slack/bolt");
-const n_config_1 = require("@nivinjoseph/n-config");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 class SlackLogger extends base_logger_1.BaseLogger {
     constructor(config) {
         var _a, _b;
         super(config);
-        this._source = "nodejs";
-        this._service = n_config_1.ConfigurationManager.getConfig("package.name");
-        this._env = n_config_1.ConfigurationManager.getConfig("env").toLowerCase();
         const { slackBotToken, slackBotChannel } = config;
         (0, n_defensive_1.given)(slackBotToken, "slackBotToken").ensureHasValue().ensureIsString();
         this._app = new bolt_1.App({
@@ -31,11 +27,11 @@ class SlackLogger extends base_logger_1.BaseLogger {
     }
     logDebug(debug) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            if (this._env === "dev") {
+            if (this.env === "dev") {
                 let log = {
-                    source: this._source,
-                    service: this._service,
-                    env: this._env,
+                    source: this.source,
+                    service: this.service,
+                    env: this.env,
                     level: "Debug",
                     message: debug,
                     dateTime: this.getDateTime(),
@@ -53,9 +49,9 @@ class SlackLogger extends base_logger_1.BaseLogger {
             if (!this._includeInfo)
                 return;
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Info",
                 message: info,
                 dateTime: this.getDateTime(),
@@ -72,9 +68,9 @@ class SlackLogger extends base_logger_1.BaseLogger {
             if (!this._includeWarn)
                 return;
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Warn",
                 message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
@@ -91,9 +87,9 @@ class SlackLogger extends base_logger_1.BaseLogger {
             if (!this._includeError)
                 return;
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Error",
                 message: this.getErrorMessage(error),
                 dateTime: this.getDateTime(),

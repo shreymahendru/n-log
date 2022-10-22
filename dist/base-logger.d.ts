@@ -3,9 +3,15 @@ import { Logger } from "./logger";
 import { LoggerConfig } from "./logger-config";
 import { LogRecord } from "./log-record";
 export declare abstract class BaseLogger implements Logger {
+    private readonly _source;
+    private readonly _service;
+    private readonly _env;
     private readonly _logDateTimeZone;
     private readonly _useJsonFormat;
     private readonly _logInjector;
+    protected get source(): string;
+    protected get service(): string;
+    protected get env(): string;
     protected get useJsonFormat(): boolean;
     protected get logInjector(): ((record: LogRecord) => LogRecord) | null;
     /**

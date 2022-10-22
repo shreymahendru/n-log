@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileLogger = void 0;
 const tslib_1 = require("tslib");
 require("@nivinjoseph/n-ext");
-const n_config_1 = require("@nivinjoseph/n-config");
 const moment = require("moment-timezone");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 const Fs = require("fs");
@@ -20,9 +19,6 @@ class FileLogger extends base_logger_1.BaseLogger {
      */
     constructor(config) {
         super(config);
-        this._source = "nodejs";
-        this._service = n_config_1.ConfigurationManager.getConfig("package.name");
-        this._env = n_config_1.ConfigurationManager.getConfig("env");
         this._mutex = new n_util_1.Mutex();
         this._lastPurgedAt = 0;
         const { logDirPath, retentionDays } = config;
@@ -36,7 +32,7 @@ class FileLogger extends base_logger_1.BaseLogger {
     }
     logDebug(debug) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            if (n_config_1.ConfigurationManager.getConfig("env") === "dev")
+            if (this.env === "dev")
                 yield this._writeToLog(log_prefix_1.LogPrefix.debug, debug);
         });
     }
@@ -77,9 +73,9 @@ class FileLogger extends base_logger_1.BaseLogger {
                         break;
                 }
                 let log = {
-                    source: this._source,
-                    service: this._service,
-                    env: this._env,
+                    source: this.source,
+                    service: this.service,
+                    env: this.env,
                     level: level,
                     message,
                     dateTime,

@@ -9,9 +9,6 @@ export declare type SlackLoggerConfig = Pick<LoggerConfig, "logDateTimeZone" | "
     fallback?: Logger;
 };
 export declare class SlackLogger extends BaseLogger {
-    private readonly _source;
-    private readonly _service;
-    private readonly _env;
     private readonly _includeInfo;
     private readonly _includeWarn;
     private readonly _includeError;

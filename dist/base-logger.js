@@ -4,6 +4,7 @@ exports.BaseLogger = void 0;
 const n_exception_1 = require("@nivinjoseph/n-exception");
 const log_date_time_zone_1 = require("./log-date-time-zone");
 const moment = require("moment-timezone");
+const n_config_1 = require("@nivinjoseph/n-config");
 class BaseLogger {
     /**
      *
@@ -12,6 +13,10 @@ class BaseLogger {
      * @param logInjector Only valid when useJsonFormat is true
      */
     constructor(config) {
+        var _a;
+        this._source = "nodejs";
+        this._service = (_a = n_config_1.ConfigurationManager.getConfig("package.name")) !== null && _a !== void 0 ? _a : n_config_1.ConfigurationManager.getConfig("package_name");
+        this._env = n_config_1.ConfigurationManager.getConfig("env").toLowerCase();
         // eslint-disable-next-line @typescript-eslint/unbound-method
         const { logDateTimeZone, useJsonFormat, logInjector } = config !== null && config !== void 0 ? config : {};
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
@@ -24,6 +29,9 @@ class BaseLogger {
         this._useJsonFormat = !!useJsonFormat;
         this._logInjector = logInjector !== null && logInjector !== void 0 ? logInjector : null;
     }
+    get source() { return this._source; }
+    get service() { return this._service; }
+    get env() { return this._env; }
     get useJsonFormat() { return this._useJsonFormat; }
     get logInjector() { return this._logInjector; }
     getErrorMessage(exp) {

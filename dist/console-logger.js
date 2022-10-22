@@ -2,24 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsoleLogger = void 0;
 const Colors = require("colors");
-const n_config_1 = require("@nivinjoseph/n-config");
 const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
 // public
 class ConsoleLogger extends base_logger_1.BaseLogger {
-    constructor() {
-        super(...arguments);
-        this._source = "nodejs";
-        this._service = n_config_1.ConfigurationManager.getConfig("package.name");
-        this._env = n_config_1.ConfigurationManager.getConfig("env").toLowerCase();
-    }
     logDebug(debug) {
-        if (this._env === "dev") {
+        if (this.env === "dev") {
             if (this.useJsonFormat) {
                 let log = {
-                    source: this._source,
-                    service: this._service,
-                    env: this._env,
+                    source: this.source,
+                    service: this.service,
+                    env: this.env,
                     level: "Debug",
                     message: debug,
                     dateTime: this.getDateTime(),
@@ -38,9 +31,9 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     logInfo(info) {
         if (this.useJsonFormat) {
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Info",
                 message: info,
                 dateTime: this.getDateTime(),
@@ -58,9 +51,9 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     logWarning(warning) {
         if (this.useJsonFormat) {
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Warn",
                 message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
@@ -78,9 +71,9 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
     logError(error) {
         if (this.useJsonFormat) {
             let log = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Error",
                 message: this.getErrorMessage(error),
                 dateTime: this.getDateTime(),

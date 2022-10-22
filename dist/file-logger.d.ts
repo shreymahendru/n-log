@@ -3,9 +3,6 @@ import { Exception } from "@nivinjoseph/n-exception";
 import { BaseLogger } from "./base-logger";
 import { FileLoggerConfig } from "./file-logger-config";
 export declare class FileLogger extends BaseLogger {
-    private readonly _source;
-    private readonly _service;
-    private readonly _env;
     private readonly _mutex;
     private readonly _logDirPath;
     private readonly _retentionDays;
