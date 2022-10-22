@@ -1,7 +1,6 @@
 import { Exception } from "@nivinjoseph/n-exception";
 import { BaseLogger } from "./base-logger";
 import { App, Receiver } from "@slack/bolt";
-import { ConfigurationManager } from "@nivinjoseph/n-config";
 import { StringIndexed } from "@slack/bolt/dist/types/helpers";
 import { given } from "@nivinjoseph/n-defensive";
 import { LoggerConfig } from "./logger-config";
@@ -18,9 +17,6 @@ export type SlackLoggerConfig = Pick<LoggerConfig, "logDateTimeZone" | "logInjec
 
 export class SlackLogger extends BaseLogger
 {
-    private readonly _source = "nodejs";
-    private readonly _service = ConfigurationManager.getConfig<string>("package.name");
-    private readonly _env = ConfigurationManager.getConfig<string>("env").toLowerCase();
     private readonly _includeInfo: boolean;
     private readonly _includeWarn: boolean;
     private readonly _includeError: boolean;
@@ -56,12 +52,12 @@ export class SlackLogger extends BaseLogger
     
     public async logDebug(debug: string): Promise<void>
     {
-        if (this._env === "dev")
+        if (this.env === "dev")
         {
             let log: SlackMessage = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Debug",
                 message: debug,
                 dateTime: this.getDateTime(),
@@ -82,9 +78,9 @@ export class SlackLogger extends BaseLogger
             return;
         
         let log: SlackMessage = {
-            source: this._source,
-            service: this._service,
-            env: this._env,
+            source: this.source,
+            service: this.service,
+            env: this.env,
             level: "Info",
             message: info,
             dateTime: this.getDateTime(),
@@ -104,9 +100,9 @@ export class SlackLogger extends BaseLogger
             return;
         
         let log: SlackMessage = {
-            source: this._source,
-            service: this._service,
-            env: this._env,
+            source: this.source,
+            service: this.service,
+            env: this.env,
             level: "Warn",
             message: this.getErrorMessage(warning),
             dateTime: this.getDateTime(),
@@ -126,9 +122,9 @@ export class SlackLogger extends BaseLogger
             return;
         
         let log: SlackMessage = {
-            source: this._source,
-            service: this._service,
-            env: this._env,
+            source: this.source,
+            service: this.service,
+            env: this.env,
             level: "Error",
             message: this.getErrorMessage(error),
             dateTime: this.getDateTime(),

@@ -1,6 +1,5 @@
 import { Exception } from "@nivinjoseph/n-exception";
 import * as Colors from "colors";
-import { ConfigurationManager } from "@nivinjoseph/n-config";
 import { BaseLogger } from "./base-logger";
 import { LogPrefix } from "./log-prefix";
 import { LogRecord } from "./log-record";
@@ -9,21 +8,16 @@ import { LogRecord } from "./log-record";
 // public
 export class ConsoleLogger extends BaseLogger
 {
-    private readonly _source = "nodejs";
-    private readonly _service = ConfigurationManager.getConfig<string>("package.name");
-    private readonly _env = ConfigurationManager.getConfig<string>("env").toLowerCase();
-    
-    
     public logDebug(debug: string): Promise<void>
     {
-        if (this._env === "dev")
+        if (this.env === "dev")
         {
             if (this.useJsonFormat)
             {
                 let log: LogRecord = {
-                    source: this._source,
-                    service: this._service,
-                    env: this._env,
+                    source: this.source,
+                    service: this.service,
+                    env: this.env,
                     level: "Debug",
                     message: debug,
                     dateTime: this.getDateTime(),
@@ -48,9 +42,9 @@ export class ConsoleLogger extends BaseLogger
         if (this.useJsonFormat)
         {
             let log: LogRecord = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Info",
                 message: info,
                 dateTime: this.getDateTime(),
@@ -75,9 +69,9 @@ export class ConsoleLogger extends BaseLogger
         if (this.useJsonFormat)
         {
             let log: LogRecord = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Warn",
                 message: this.getErrorMessage(warning),
                 dateTime: this.getDateTime(),
@@ -102,9 +96,9 @@ export class ConsoleLogger extends BaseLogger
         if (this.useJsonFormat)
         {
             let log: LogRecord = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: "Error",
                 message: this.getErrorMessage(error),
                 dateTime: this.getDateTime(),

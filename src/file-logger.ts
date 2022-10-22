@@ -1,6 +1,5 @@
 import "@nivinjoseph/n-ext";
 import { Exception } from "@nivinjoseph/n-exception";
-import { ConfigurationManager } from "@nivinjoseph/n-config";
 import * as moment from "moment-timezone";
 import { given } from "@nivinjoseph/n-defensive";
 import * as Fs from "fs";
@@ -15,10 +14,6 @@ import { LogRecord } from "./log-record";
 // public
 export class FileLogger extends BaseLogger
 {
-    private readonly _source = "nodejs";
-    private readonly _service = ConfigurationManager.getConfig<string>("package.name");
-    private readonly _env = ConfigurationManager.getConfig<string>("env");
-    
     private readonly _mutex = new Mutex();
     private readonly _logDirPath: string;
     private readonly _retentionDays: number;
@@ -51,7 +46,7 @@ export class FileLogger extends BaseLogger
 
     public async logDebug(debug: string): Promise<void>
     {
-        if (ConfigurationManager.getConfig<string>("env") === "dev")
+        if (this.env === "dev")
             await this._writeToLog(LogPrefix.debug, debug);
     }
 
@@ -98,9 +93,9 @@ export class FileLogger extends BaseLogger
             }
             
             let log: LogRecord = {
-                source: this._source,
-                service: this._service,
-                env: this._env,
+                source: this.source,
+                service: this.service,
+                env: this.env,
                 level: level,
                 message,
                 dateTime,

@@ -4,14 +4,21 @@ import { Logger } from "./logger";
 import * as moment from "moment-timezone";
 import { LoggerConfig } from "./logger-config";
 import { LogRecord } from "./log-record";
+import { ConfigurationManager } from "@nivinjoseph/n-config";
 
 
 export abstract class BaseLogger implements Logger
 {
+    private readonly _source = "nodejs";
+    private readonly _service = ConfigurationManager.getConfig<string | null>("package.name") ?? ConfigurationManager.getConfig<string>("package_name");
+    private readonly _env = ConfigurationManager.getConfig<string>("env").toLowerCase();
     private readonly _logDateTimeZone: LogDateTimeZone;
     private readonly _useJsonFormat: boolean;
     private readonly _logInjector: ((record: LogRecord) => LogRecord) | null;
     
+    protected get source(): string { return this._source; }
+    protected get service(): string { return this._service; }
+    protected get env(): string { return this._env; }
     
     protected get useJsonFormat(): boolean { return this._useJsonFormat; }
     protected get logInjector(): ((record: LogRecord) => LogRecord) | null { return this._logInjector; }
