@@ -13,10 +13,10 @@ class BaseLogger {
      * @param logInjector Only valid when useJsonFormat is true
      */
     constructor(config) {
-        var _a;
+        var _a, _b, _c, _d;
         this._source = "nodejs";
-        this._service = (_a = n_config_1.ConfigurationManager.getConfig("package.name")) !== null && _a !== void 0 ? _a : n_config_1.ConfigurationManager.getConfig("package_name");
-        this._env = n_config_1.ConfigurationManager.getConfig("env").toLowerCase();
+        this._service = (_b = (_a = n_config_1.ConfigurationManager.getConfig("package_name")) !== null && _a !== void 0 ? _a : n_config_1.ConfigurationManager.getConfig("package.name")) !== null && _b !== void 0 ? _b : "n-known";
+        this._env = (_d = (_c = n_config_1.ConfigurationManager.getConfig("env")) === null || _c === void 0 ? void 0 : _c.toLowerCase()) !== null && _d !== void 0 ? _d : "dev";
         // eslint-disable-next-line @typescript-eslint/unbound-method
         const { logDateTimeZone, useJsonFormat, logInjector } = config !== null && config !== void 0 ? config : {};
         if (!logDateTimeZone || logDateTimeZone.isEmptyOrWhiteSpace() ||
