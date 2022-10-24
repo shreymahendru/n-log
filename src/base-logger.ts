@@ -10,8 +10,8 @@ import { ConfigurationManager } from "@nivinjoseph/n-config";
 export abstract class BaseLogger implements Logger
 {
     private readonly _source = "nodejs";
-    private readonly _service = ConfigurationManager.getConfig<string | null>("package.name") ?? ConfigurationManager.getConfig<string>("package_name");
-    private readonly _env = ConfigurationManager.getConfig<string>("env").toLowerCase();
+    private readonly _service = ConfigurationManager.getConfig<string | null>("package_name") ?? ConfigurationManager.getConfig<string | null>("package.name") ?? "n-known";
+    private readonly _env = ConfigurationManager.getConfig<string | null>("env")?.toLowerCase() ?? "dev";
     private readonly _logDateTimeZone: LogDateTimeZone;
     private readonly _useJsonFormat: boolean;
     private readonly _logInjector: ((record: LogRecord) => LogRecord) | null;
