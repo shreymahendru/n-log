@@ -10,7 +10,7 @@ function doSomethingStupid(): void
     console.log(s.trim());
 }
 
-suite.only("SlackLogger tests", () =>
+suite.skip("SlackLogger tests", () =>
 {
     test("Basic tests", async () =>
     {
