@@ -9,7 +9,6 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         super(...arguments);
         this._stream = process.stdout;
     }
-    // @ts-expect-error: deliberately skipping returning
     logDebug(debug) {
         if (this.env === "dev") {
             if (this.useJsonFormat) {
@@ -30,8 +29,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.debug} ${debug}\n`);
             }
         }
+        return Promise.resolve();
     }
-    // @ts-expect-error: deliberately skipping returning
     logInfo(info) {
         if (this.useJsonFormat) {
             let log = {
@@ -50,8 +49,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         else {
             this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.info} ${info}\n`);
         }
+        return Promise.resolve();
     }
-    // @ts-expect-error: deliberately skipping returning
     logWarning(warning) {
         if (this.useJsonFormat) {
             let log = {
@@ -70,8 +69,8 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         else {
             this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}\n`);
         }
+        return Promise.resolve();
     }
-    // @ts-expect-error: deliberately skipping returning
     logError(error) {
         if (this.useJsonFormat) {
             let log = {
@@ -90,6 +89,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
         else {
             this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}\n`);
         }
+        return Promise.resolve();
     }
 }
 exports.ConsoleLogger = ConsoleLogger;
