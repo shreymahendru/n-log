@@ -1,11 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConsoleLogger = void 0;
-const Colors = require("colors");
 const base_logger_1 = require("./base-logger");
 const log_prefix_1 = require("./log-prefix");
 // public
 class ConsoleLogger extends base_logger_1.BaseLogger {
+    constructor() {
+        super(...arguments);
+        this._stream = process.stdout;
+    }
+    // @ts-expect-error: deliberately skipping returning
     logDebug(debug) {
         if (this.env === "dev") {
             if (this.useJsonFormat) {
@@ -20,14 +24,14 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 };
                 if (this.logInjector)
                     log = this.logInjector(log);
-                console.log(Colors.grey(JSON.stringify(log)));
+                this._stream.write(JSON.stringify(log) + "\n");
             }
             else {
-                console.log(Colors.grey(`${this.getDateTime()} ${log_prefix_1.LogPrefix.debug} ${debug}`));
+                this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.debug} ${debug}\n`);
             }
         }
-        return Promise.resolve();
     }
+    // @ts-expect-error: deliberately skipping returning
     logInfo(info) {
         if (this.useJsonFormat) {
             let log = {
@@ -41,13 +45,13 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             };
             if (this.logInjector)
                 log = this.logInjector(log);
-            console.log(Colors.green(JSON.stringify(log)));
+            this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            console.log(Colors.green(`${this.getDateTime()} ${log_prefix_1.LogPrefix.info} ${info}`));
+            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.info} ${info}\n`);
         }
-        return Promise.resolve();
     }
+    // @ts-expect-error: deliberately skipping returning
     logWarning(warning) {
         if (this.useJsonFormat) {
             let log = {
@@ -61,13 +65,13 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             };
             if (this.logInjector)
                 log = this.logInjector(log);
-            console.warn(Colors.yellow(JSON.stringify(log)));
+            this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            console.warn(Colors.yellow(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}`));
+            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}\n`);
         }
-        return Promise.resolve();
     }
+    // @ts-expect-error: deliberately skipping returning
     logError(error) {
         if (this.useJsonFormat) {
             let log = {
@@ -81,12 +85,11 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             };
             if (this.logInjector)
                 log = this.logInjector(log);
-            console.error(Colors.red(JSON.stringify(log)));
+            this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            console.error(Colors.red(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}`));
+            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}\n`);
         }
-        return Promise.resolve();
     }
 }
 exports.ConsoleLogger = ConsoleLogger;
