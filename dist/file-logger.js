@@ -81,6 +81,7 @@ class FileLogger extends base_logger_1.BaseLogger {
                     dateTime,
                     time: new Date().toISOString()
                 };
+                this.injectTrace(log);
                 if (this.logInjector)
                     log = this.logInjector(log);
                 message = JSON.stringify(log);

@@ -5,6 +5,7 @@ const n_exception_1 = require("@nivinjoseph/n-exception");
 const log_date_time_zone_1 = require("./log-date-time-zone");
 const moment = require("moment-timezone");
 const n_config_1 = require("@nivinjoseph/n-config");
+const api_1 = require("@opentelemetry/api");
 class BaseLogger {
     /**
      *
@@ -70,6 +71,17 @@ class BaseLogger {
                 break;
         }
         return result;
+    }
+    injectTrace(log) {
+        const span = api_1.trace.getSpan(api_1.context.active());
+        if (span) {
+            const spanContext = span.spanContext();
+            if ((0, api_1.isSpanContextValid)(spanContext)) {
+                log["trace_id"] = spanContext.traceId;
+                log["span_id"] = spanContext.spanId;
+                log["trace_flags"] = `0${spanContext.traceFlags.toString(16)}`;
+            }
+        }
     }
 }
 exports.BaseLogger = BaseLogger;
