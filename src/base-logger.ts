@@ -5,6 +5,7 @@ import * as moment from "moment-timezone";
 import { LoggerConfig } from "./logger-config";
 import { LogRecord } from "./log-record";
 import { ConfigurationManager } from "@nivinjoseph/n-config";
+import { context, trace, isSpanContextValid } from "@opentelemetry/api";
 
 
 export abstract class BaseLogger implements Logger
@@ -76,7 +77,6 @@ export abstract class BaseLogger implements Logger
         return logMessage;
     }
 
-
     protected getDateTime(): string
     {
         let result: string | null = null;
@@ -101,5 +101,22 @@ export abstract class BaseLogger implements Logger
         }
 
         return result;
+    }
+    
+    protected injectTrace(log: Record<string, any>): void
+    {
+        const span = trace.getSpan(context.active());
+
+        if (span)
+        {
+            const spanContext = span.spanContext();
+
+            if (isSpanContextValid(spanContext))
+            {
+                log["trace_id"] = spanContext.traceId;
+                log["span_id"] = spanContext.spanId;
+                log["trace_flags"] = `0${spanContext.traceFlags.toString(16)}`;
+            }
+        }
     }
 }

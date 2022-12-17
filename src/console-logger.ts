@@ -3,7 +3,6 @@ import { BaseLogger } from "./base-logger";
 import { LogPrefix } from "./log-prefix";
 import { LogRecord } from "./log-record";
 
-
 // public
 export class ConsoleLogger extends BaseLogger
 {
@@ -24,6 +23,8 @@ export class ConsoleLogger extends BaseLogger
                     dateTime: this.getDateTime(),
                     time: new Date().toISOString()
                 };
+                
+                this.injectTrace(log);
                 
                 if (this.logInjector)
                     log = this.logInjector(log);
@@ -53,6 +54,8 @@ export class ConsoleLogger extends BaseLogger
                 time: new Date().toISOString()
             };
             
+            this.injectTrace(log);
+            
             if (this.logInjector)
                 log = this.logInjector(log);
             
@@ -80,6 +83,8 @@ export class ConsoleLogger extends BaseLogger
                 time: new Date().toISOString()
             };
             
+            this.injectTrace(log);
+            
             if (this.logInjector)
                 log = this.logInjector(log);
 
@@ -106,6 +111,8 @@ export class ConsoleLogger extends BaseLogger
                 dateTime: this.getDateTime(),
                 time: new Date().toISOString()
             };
+            
+            this.injectTrace(log);
             
             if (this.logInjector)
                 log = this.logInjector(log);
