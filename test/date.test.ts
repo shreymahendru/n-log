@@ -56,7 +56,7 @@ suite("Date", () =>
         const localLogger = new ConsoleLogger({logDateTimeZone: LogDateTimeZone.local});
         await localLogger.logWarning("This is a warning local");
         
-        const estLogger = new ConsoleLogger({ logDateTimeZone: LogDateTimeZone.est, useJsonFormat: true});
+        const estLogger = new ConsoleLogger({ logDateTimeZone: LogDateTimeZone.est, useJsonFormat: true, enableOtelToDatadogTraceConversion: true});
         await estLogger.logWarning("This is a warning est");
         
         const pstLogger = new ConsoleLogger({logDateTimeZone: LogDateTimeZone.pst});

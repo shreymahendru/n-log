@@ -7,4 +7,5 @@ export interface LoggerConfig
     logDateTimeZone?: LogDateTimeZone;
     useJsonFormat?: boolean;
     logInjector?(record: LogRecord): LogRecord;
+    enableOtelToDatadogTraceConversion?: boolean;
 }
