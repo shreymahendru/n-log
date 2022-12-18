@@ -3,12 +3,14 @@ import { Logger } from "./logger";
 import { LoggerConfig } from "./logger-config";
 import { LogRecord } from "./log-record";
 export declare abstract class BaseLogger implements Logger {
+    private readonly _UINT_MAX;
     private readonly _source;
     private readonly _service;
     private readonly _env;
     private readonly _logDateTimeZone;
     private readonly _useJsonFormat;
     private readonly _logInjector;
+    private readonly _enableOtelToDatadogTraceConversion;
     protected get source(): string;
     protected get service(): string;
     protected get env(): string;
@@ -28,4 +30,8 @@ export declare abstract class BaseLogger implements Logger {
     protected getErrorMessage(exp: Exception | Error | any): string;
     protected getDateTime(): string;
     protected injectTrace(log: Record<string, any>): void;
+    private _toNumberString;
+    private _fromString;
+    private _writeUInt32BE;
+    private _readInt32;
 }
