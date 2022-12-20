@@ -29,7 +29,7 @@ export declare abstract class BaseLogger implements Logger {
     abstract logError(error: string | Exception): Promise<void>;
     protected getErrorMessage(exp: Exception | Error | any): string;
     protected getDateTime(): string;
-    protected injectTrace(log: Record<string, any>): void;
+    protected injectTrace(log: LogRecord & Record<string, any>, isError?: boolean): void;
     private _toNumberString;
     private _fromString;
     private _writeUInt32BE;

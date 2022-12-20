@@ -75,7 +75,7 @@ class BaseLogger {
         }
         return result;
     }
-    injectTrace(log) {
+    injectTrace(log, isError = false) {
         const span = api_1.trace.getSpan(api_1.context.active());
         if (span) {
             const spanContext = span.spanContext();
@@ -83,6 +83,11 @@ class BaseLogger {
                 log["trace_id"] = spanContext.traceId;
                 log["span_id"] = spanContext.spanId;
                 log["trace_flags"] = `0${spanContext.traceFlags.toString(16)}`;
+                if (isError)
+                    span.setStatus({
+                        code: api_1.SpanStatusCode.ERROR,
+                        message: log.message
+                    });
                 if (this._enableOtelToDatadogTraceConversion) {
                     const traceIdEnd = spanContext.traceId.slice(spanContext.traceId.length / 2);
                     log["dd.trace_id"] = this._toNumberString(this._fromString(traceIdEnd, 16));
