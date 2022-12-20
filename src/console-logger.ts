@@ -112,7 +112,7 @@ export class ConsoleLogger extends BaseLogger
                 time: new Date().toISOString()
             };
             
-            this.injectTrace(log);
+            this.injectTrace(log, true);
             
             if (this.logInjector)
                 log = this.logInjector(log);

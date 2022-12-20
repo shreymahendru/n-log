@@ -102,7 +102,7 @@ export class FileLogger extends BaseLogger
                 time: new Date().toISOString()
             };
             
-            this.injectTrace(log);
+            this.injectTrace(log, level === "Error");
             
             if (this.logInjector)
                 log = this.logInjector(log);
