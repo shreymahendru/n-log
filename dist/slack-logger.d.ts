@@ -2,6 +2,7 @@ import { Exception } from "@nivinjoseph/n-exception";
 import { BaseLogger } from "./base-logger";
 import { LoggerConfig } from "./logger-config";
 import { Logger } from "./logger";
+import { LogRecord } from "./log-record";
 import { Disposable } from "@nivinjoseph/n-util";
 export declare type SlackLoggerConfig = Pick<LoggerConfig, "logDateTimeZone" | "logInjector"> & {
     slackBotToken: string;
@@ -9,12 +10,14 @@ export declare type SlackLoggerConfig = Pick<LoggerConfig, "logDateTimeZone" | "
     slackUserName?: string;
     slackUserImage?: string;
     filter?: ReadonlyArray<"Info" | "Warn" | "Error">;
+    logFilter?(record: LogRecord): boolean;
     fallback?: Logger;
 };
 export declare class SlackLogger extends BaseLogger implements Disposable {
     private readonly _includeInfo;
     private readonly _includeWarn;
     private readonly _includeError;
+    private readonly _logFilter;
     private readonly _fallbackLogger;
     private readonly _app;
     private readonly _channel;

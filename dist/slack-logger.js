@@ -14,7 +14,8 @@ class SlackLogger extends base_logger_1.BaseLogger {
         this._messages = new Array();
         this._isDisposed = false;
         this._disposePromise = null;
-        const { slackBotToken, slackBotChannel, slackUserName, slackUserImage } = config;
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        const { slackBotToken, slackBotChannel, slackUserName, slackUserImage, logFilter } = config;
         (0, n_defensive_1.given)(slackBotToken, "slackBotToken").ensureHasValue().ensureIsString();
         this._app = new bolt_1.App({
             receiver: new DummyReceiver(),
@@ -37,6 +38,8 @@ class SlackLogger extends base_logger_1.BaseLogger {
         this._includeInfo = filter.contains("Info");
         this._includeWarn = filter.contains("Warn");
         this._includeError = filter.contains("Error");
+        (0, n_defensive_1.given)(logFilter, "logFilter").ensureIsFunction();
+        this._logFilter = logFilter !== null && logFilter !== void 0 ? logFilter : ((_) => true);
         this._fallbackLogger = (_b = config.fallback) !== null && _b !== void 0 ? _b : null;
         this._timer = setInterval(() => {
             this._flushMessages()
@@ -76,6 +79,8 @@ class SlackLogger extends base_logger_1.BaseLogger {
                 time: new Date().toISOString(),
                 color: "#259D2F"
             };
+            if (!this._logFilter(log))
+                return;
             if (this.logInjector)
                 log = this.logInjector(log);
             this._messages.push(log);
@@ -95,6 +100,8 @@ class SlackLogger extends base_logger_1.BaseLogger {
                 time: new Date().toISOString(),
                 color: "#F1AB2A"
             };
+            if (!this._logFilter(log))
+                return;
             if (this.logInjector)
                 log = this.logInjector(log);
             this._messages.push(log);
@@ -114,6 +121,8 @@ class SlackLogger extends base_logger_1.BaseLogger {
                 time: new Date().toISOString(),
                 color: "#EF401D"
             };
+            if (!this._logFilter(log))
+                return;
             if (this.logInjector)
                 log = this.logInjector(log);
             this._messages.push(log);
