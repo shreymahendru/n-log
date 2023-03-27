@@ -18,7 +18,7 @@ class BaseLogger {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         this._UINT_MAX = 4294967296;
         this._source = "nodejs";
-        this._service = (_b = (_a = n_config_1.ConfigurationManager.getConfig("package_name")) !== null && _a !== void 0 ? _a : n_config_1.ConfigurationManager.getConfig("package.name")) !== null && _b !== void 0 ? _b : "n-known";
+        this._service = (_b = (_a = n_config_1.ConfigurationManager.getConfig("package_name")) !== null && _a !== void 0 ? _a : n_config_1.ConfigurationManager.getConfig("package.name")) !== null && _b !== void 0 ? _b : "n-log";
         this._env = (_d = (_c = n_config_1.ConfigurationManager.getConfig("env")) === null || _c === void 0 ? void 0 : _c.toLowerCase()) !== null && _d !== void 0 ? _d : "dev";
         // eslint-disable-next-line @typescript-eslint/unbound-method
         const { logDateTimeZone, useJsonFormat, logInjector, enableOtelToDatadogTraceConversion } = config !== null && config !== void 0 ? config : {};
