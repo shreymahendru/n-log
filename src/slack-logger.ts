@@ -15,6 +15,7 @@ export type SlackLoggerConfig = Pick<LoggerConfig, "logDateTimeZone" | "logInjec
     slackUserName?: string;
     slackUserImage?: string;
     filter?: ReadonlyArray<"Info" | "Warn" | "Error">;
+    logFilter?(record: LogRecord): boolean;
     fallback?: Logger;
 };
 
@@ -23,6 +24,7 @@ export class SlackLogger extends BaseLogger implements Disposable
     private readonly _includeInfo: boolean;
     private readonly _includeWarn: boolean;
     private readonly _includeError: boolean;
+    private readonly _logFilter: (record: LogRecord) => boolean;
     private readonly _fallbackLogger: Logger | null;
     private readonly _app: App;   
     private readonly _channel: string;
@@ -39,7 +41,8 @@ export class SlackLogger extends BaseLogger implements Disposable
     {
         super(config);
         
-        const { slackBotToken, slackBotChannel, slackUserName, slackUserImage } = config;
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        const { slackBotToken, slackBotChannel, slackUserName, slackUserImage, logFilter } = config;
 
         given(slackBotToken, "slackBotToken").ensureHasValue().ensureIsString();
         this._app = new App({
@@ -68,6 +71,10 @@ export class SlackLogger extends BaseLogger implements Disposable
         this._includeInfo = filter.contains("Info");
         this._includeWarn = filter.contains("Warn");
         this._includeError = filter.contains("Error");
+        
+        given(logFilter, "logFilter").ensureIsFunction();
+        
+        this._logFilter = logFilter ?? ((_: LogRecord): boolean => true);
         
         this._fallbackLogger = config.fallback ?? null;
         
@@ -117,6 +124,9 @@ export class SlackLogger extends BaseLogger implements Disposable
             color: "#259D2F"
         };
         
+        if (!this._logFilter(log))
+            return;
+        
         if (this.logInjector)
             log = this.logInjector(log) as SlackMessage;
 
@@ -139,6 +149,9 @@ export class SlackLogger extends BaseLogger implements Disposable
             color: "#F1AB2A"
         };
         
+        if (!this._logFilter(log))
+            return;
+        
         if (this.logInjector)
             log = this.logInjector(log) as SlackMessage;
 
@@ -160,6 +173,9 @@ export class SlackLogger extends BaseLogger implements Disposable
             time: new Date().toISOString(),
             color: "#EF401D"
         };
+        
+        if (!this._logFilter(log))
+            return;
         
         if (this.logInjector)
             log = this.logInjector(log) as SlackMessage;
