@@ -13,7 +13,7 @@ export abstract class BaseLogger implements Logger
     // eslint-disable-next-line @typescript-eslint/naming-convention
     private readonly _UINT_MAX = 4294967296;
     private readonly _source = "nodejs";
-    private readonly _service = ConfigurationManager.getConfig<string | null>("package_name") ?? ConfigurationManager.getConfig<string | null>("package.name") ?? "n-known";
+    private readonly _service = ConfigurationManager.getConfig<string | null>("package_name") ?? ConfigurationManager.getConfig<string | null>("package.name") ?? "n-log";
     private readonly _env = ConfigurationManager.getConfig<string | null>("env")?.toLowerCase() ?? "dev";
     private readonly _logDateTimeZone: LogDateTimeZone;
     private readonly _useJsonFormat: boolean;

@@ -1,6 +1,6 @@
 import { ConfigurationManager } from "@nivinjoseph/n-config";
 import * as Assert from "assert";
-import { SlackLogger } from "../src";
+import { LogDateTimeZone, SlackLogger } from "../src";
 
 
 function doSomethingStupid(): void
@@ -10,13 +10,16 @@ function doSomethingStupid(): void
     console.log(s.trim());
 }
 
-suite.skip("SlackLogger tests", () =>
+suite.only("SlackLogger tests", () =>
 {
     test("Basic tests", async () =>
     {
         const logger = new SlackLogger({
             slackBotToken: ConfigurationManager.getConfig("slackBotToken"),
-            slackBotChannel: ConfigurationManager.getConfig("slackBotChannel")
+            slackBotChannel: ConfigurationManager.getConfig("slackBotChannel"),
+            slackUserName: "n-log test",
+            // slackUserImage: "https://www.advancedaircharters.com/static/959dd2cfbff77d3dd8ee907b539f8d1b/1035a/footer-logo.png",
+            logDateTimeZone: LogDateTimeZone.est
         });
         
         await logger.logDebug("Hello world");
@@ -36,7 +39,7 @@ suite.skip("SlackLogger tests", () =>
             await logger.logError(error as any);
         }
         
-        
+        await logger.dispose();
 
         Assert.ok(true);
     });
