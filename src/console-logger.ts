@@ -7,6 +7,7 @@ import { LogRecord } from "./log-record.js";
 export class ConsoleLogger extends BaseLogger
 {
     private readonly _stream = process.stdout;
+    private readonly _resetColorCode = "\x1b[0m";
 
     public logDebug(debug: string): Promise<void>
     {
@@ -63,7 +64,9 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            this._stream.write(`${this.getDateTime()} ${LogPrefix.info} ${info}\n`);
+            const startColorCode = "\x1b[34m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.info} ${info}${endColorCode}${this._resetColorCode}\n`);
         }
 
         return Promise.resolve();
@@ -92,7 +95,9 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            this._stream.write(`${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}\n`);
+            const startColorCode = "\x1b[33m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}${endColorCode}${this._resetColorCode}\n`);
         }
 
         return Promise.resolve();
@@ -121,7 +126,9 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            this._stream.write(`${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}\n`);
+            const startColorCode = "\x1b[31m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}${endColorCode}${this._resetColorCode}\n`);
         }
 
         return Promise.resolve();
