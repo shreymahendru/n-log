@@ -2,12 +2,13 @@ import { Exception } from "@nivinjoseph/n-exception";
 import { BaseLogger } from "./base-logger.js";
 import { LogPrefix } from "./log-prefix.js";
 import { LogRecord } from "./log-record.js";
+import chalk from "chalk";
 
 // public
 export class ConsoleLogger extends BaseLogger
 {
     private readonly _stream = process.stdout;
-    private readonly _resetColorCode = "\x1b[0m";
+
 
     public logDebug(debug: string): Promise<void>
     {
@@ -64,9 +65,8 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const startColorCode = "\x1b[34m";
-            const endColorCode = "\x1b[89m";
-            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.info} ${info}${endColorCode}${this._resetColorCode}\n`);
+            const prefix = `${this.getDateTime()} ${LogPrefix.info}`;
+            this._stream.write(`${chalk.blue.bold(prefix)} ${chalk.blue(info)}\n`);
         }
 
         return Promise.resolve();
@@ -95,9 +95,8 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const startColorCode = "\x1b[33m";
-            const endColorCode = "\x1b[89m";
-            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}${endColorCode}${this._resetColorCode}\n`);
+            const prefix = `${this.getDateTime()} ${LogPrefix.warning}`;
+            this._stream.write(`${chalk.bold.yellow(prefix)} ${chalk.yellow(this.getErrorMessage(warning))}\n`);
         }
 
         return Promise.resolve();
@@ -126,9 +125,8 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const startColorCode = "\x1b[31m";
-            const endColorCode = "\x1b[89m";
-            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}${endColorCode}${this._resetColorCode}\n`);
+            const prefix = `${this.getDateTime()} ${LogPrefix.error}`;
+            this._stream.write(`${chalk.red.bold(prefix)} ${chalk.red(this.getErrorMessage(error))}\n`);
         }
 
         return Promise.resolve();
