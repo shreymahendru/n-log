@@ -65,8 +65,7 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const prefix = `${this.getDateTime()} ${LogPrefix.info}`;
-            this._stream.write(`${chalk.blue.bold(prefix)} ${chalk.blue(info)}\n`);
+            this._stream.write(chalk.blue(`${this.getDateTime()} ${chalk.bold(LogPrefix.info)} ${info}\n`));
         }
 
         return Promise.resolve();
@@ -95,8 +94,7 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const prefix = `${this.getDateTime()} ${LogPrefix.warning}`;
-            this._stream.write(`${chalk.bold.yellow(prefix)} ${chalk.yellow(this.getErrorMessage(warning))}\n`);
+            this._stream.write(chalk.yellow(`${this.getDateTime()} ${chalk.bold(LogPrefix.warning)} ${this.getErrorMessage(warning)}\n`));
         }
 
         return Promise.resolve();
@@ -125,8 +123,7 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            const prefix = `${this.getDateTime()} ${LogPrefix.error}`;
-            this._stream.write(`${chalk.red.bold(prefix)} ${chalk.red(this.getErrorMessage(error))}\n`);
+            this._stream.write(chalk.red(`${this.getDateTime()} ${chalk.red.bold(LogPrefix.error)} ${this.getErrorMessage(error)}\n`));
         }
 
         return Promise.resolve();
