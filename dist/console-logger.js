@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConsoleLogger = void 0;
-const base_logger_1 = require("./base-logger");
-const log_prefix_1 = require("./log-prefix");
+import { BaseLogger } from "./base-logger.js";
+import { LogPrefix } from "./log-prefix.js";
 // public
-class ConsoleLogger extends base_logger_1.BaseLogger {
+export class ConsoleLogger extends BaseLogger {
     constructor() {
         super(...arguments);
         this._stream = process.stdout;
+        this._resetColorCode = "\x1b[0m";
     }
     logDebug(debug) {
         if (this.env === "dev") {
@@ -27,7 +25,7 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
                 this._stream.write(JSON.stringify(log) + "\n");
             }
             else {
-                this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.debug} ${debug}\n`);
+                this._stream.write(`${this.getDateTime()} ${LogPrefix.debug} ${debug}\n`);
             }
         }
         return Promise.resolve();
@@ -49,7 +47,9 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.info} ${info}\n`);
+            const startColorCode = "\x1b[34m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.info} ${info}${endColorCode}${this._resetColorCode}\n`);
         }
         return Promise.resolve();
     }
@@ -70,7 +70,9 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.warning} ${this.getErrorMessage(warning)}\n`);
+            const startColorCode = "\x1b[33m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.warning} ${this.getErrorMessage(warning)}${endColorCode}${this._resetColorCode}\n`);
         }
         return Promise.resolve();
     }
@@ -91,10 +93,11 @@ class ConsoleLogger extends base_logger_1.BaseLogger {
             this._stream.write(JSON.stringify(log) + "\n");
         }
         else {
-            this._stream.write(`${this.getDateTime()} ${log_prefix_1.LogPrefix.error} ${this.getErrorMessage(error)}\n`);
+            const startColorCode = "\x1b[31m";
+            const endColorCode = "\x1b[89m";
+            this._stream.write(`${startColorCode}${this.getDateTime()} ${LogPrefix.error} ${this.getErrorMessage(error)}${endColorCode}${this._resetColorCode}\n`);
         }
         return Promise.resolve();
     }
 }
-exports.ConsoleLogger = ConsoleLogger;
 //# sourceMappingURL=console-logger.js.map
