@@ -123,7 +123,7 @@ export class ConsoleLogger extends BaseLogger
         }
         else
         {
-            this._stream.write(chalk.red(`${this.getDateTime()} ${chalk.red.bold(LogPrefix.error)} ${this.getErrorMessage(error)}\n`));
+            this._stream.write(chalk.red(`${this.getDateTime()} ${chalk.bold(LogPrefix.error)} ${this.getErrorMessage(error)}\n`));
         }
 
         return Promise.resolve();
